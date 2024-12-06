@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Chrome Tab Set",
+  "description": "Save and restore tab sets",
+  "version": "1.0",
+  "icons": {
+    "16": "image.jpg",
+    "32": "image.jpg",
+    "48": "image.jpg",
+    "128": "image.jpg"
+  },
+  "action": {
+    "default_popup": "pages/index.html",
+    "default_icon": "image.jpg"
+  },
+  "permissions": [
+    "storage"
+  ]
+}
