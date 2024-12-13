@@ -23,10 +23,48 @@ function display_tab_list(tab_list) {
   const ul = document.createElement('ul');
   tab_list.forEach(tab_set => {
     const li = document.createElement('li');
-    li.textContent = tab_set.name;
-    li.addEventListener('click', () => {
+
+    // セット名
+    const span = document.createElement('span');
+    span.textContent = tab_set.name;
+    span.addEventListener('click', () => {
       open_tabs(tab_set.id);
     });
+
+    // 編集ボタン
+    const editButton = document.createElement('button');
+    editButton.textContent = '編集';
+    editButton.addEventListener('click', () => {
+      // タブセット編集画面を開く
+      window.location.href = 'new.html?id=' + tab_set.id;
+    });
+
+    // 削除ボタン
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = '削除';
+    deleteButton.addEventListener('click', () => {
+      // タブセットを削除
+      chrome.storage.local.get(['tab_set'], function (value) {
+        const data = value.tab_set
+        const newData = data.filter(tab => tab.id !== tab_set.id);
+        // IDを1から振り直す
+        newData.forEach((tab, index) => {
+          tab.id = index + 1;
+        });
+        chrome.storage.local.set({ 'tab_set': newData }, function () {
+          // タブ一覧を再表示
+          tab_area.innerHTML = '';
+          display_tab_list(newData);
+        });
+      })
+    });
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.appendChild(editButton);
+    buttonContainer.appendChild(deleteButton);
+
+    li.appendChild(span);
+    li.appendChild(buttonContainer);
     ul.appendChild(li);
   })
   tab_area.appendChild(ul);
